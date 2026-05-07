@@ -1,19 +1,17 @@
 package com.jin.pojo.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;  // OpenAPI 3 注解
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-@ApiModel(description = "员工登录时传递的数据模型")
+@Schema(description = "员工登录时传递的数据模型")  // 替代 @ApiModel
 public class EmployeeLoginDTO implements Serializable {
 
-    @ApiModelProperty("用户名")
+    @Schema(description = "用户名")  // 替代 @ApiModelProperty
     private String username;
 
-    @ApiModelProperty("密码")
+    @Schema(description = "密码")
     private String password;
-
 }
