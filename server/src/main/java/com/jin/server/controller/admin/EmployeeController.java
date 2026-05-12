@@ -1,8 +1,10 @@
 package com.jin.server.controller.admin;
 
 import com.jin.common.constant.JwtClaimsConstant;
+import com.jin.common.result.PageResult;
 import com.jin.pojo.dto.EmployeeDTO;
 import com.jin.pojo.dto.EmployeeLoginDTO;
+import com.jin.pojo.dto.EmployeePageQueryDTO;
 import com.jin.pojo.entity.Employee;
 import com.jin.common.properties.JwtProperties;
 import com.jin.common.result.Result;
@@ -11,12 +13,10 @@ import com.jin.common.utils.JwtUtil;
 import com.jin.pojo.vo.EmployeeLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,6 +81,18 @@ public class EmployeeController {
         log.info("新增员工:{}",employeeDTO);
         employeeService.addEmp(employeeDTO);
         return Result.success();
+    }
+
+    /**
+     * 分页查询员工
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @GetMapping("/page")
+    public Result<PageResult> selectEmpByPage(EmployeePageQueryDTO employeePageQueryDTO){
+        log.info("分页查询参数位:{}",employeePageQueryDTO);
+        PageResult pageResult = employeeService.selectEmpByPage(employeePageQueryDTO);
+        return Result.success(pageResult);
     }
 
 }

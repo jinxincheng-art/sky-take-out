@@ -1,24 +1,31 @@
 package com.jin.server.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.jin.common.constant.MessageConstant;
 import com.jin.common.constant.PasswordConstant;
 import com.jin.common.constant.StatusConstant;
 import com.jin.common.context.BaseContext;
+import com.jin.common.result.PageResult;
 import com.jin.pojo.dto.EmployeeDTO;
 import com.jin.pojo.dto.EmployeeLoginDTO;
+import com.jin.pojo.dto.EmployeePageQueryDTO;
 import com.jin.pojo.entity.Employee;
 import com.jin.common.exception.AccountLockedException;
 import com.jin.common.exception.AccountNotFoundException;
 import com.jin.common.exception.PasswordErrorException;
 import com.jin.server.mapper.EmployeeMapper;
 import com.jin.server.service.EmployeeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Slf4j
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -74,4 +81,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.addEmp(employee);
     }
 
+    @Override
+    public PageResult selectEmpByPage(EmployeePageQueryDTO employeePageQueryDTO) {
+        Page<Employee> page;
+        PageResult pageInfo = null;
+        try {
+            PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+            page = employeeMapper.selectEmpByPage(employeePageQueryDTO);
+            pageInfo = new PageResult(page.getTotal(),page.getResult());
+        }catch (Exception e){
+            log.error("查询失败:{}",e.getMessage());
+        }finally {
+            PageHelper.clearPage();
+        }
+        return pageInfo;
+    }
 }

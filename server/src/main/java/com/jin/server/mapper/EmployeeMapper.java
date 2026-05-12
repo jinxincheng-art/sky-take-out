@@ -1,9 +1,14 @@
 package com.jin.server.mapper;
 
+import com.github.pagehelper.Page;
+import com.jin.common.result.PageResult;
+import com.jin.pojo.dto.EmployeePageQueryDTO;
 import com.jin.pojo.entity.Employee;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface EmployeeMapper {
@@ -20,4 +25,6 @@ public interface EmployeeMapper {
             ",update_time,create_user,update_user,status) values (#{name},#{username},#{password},#{phone},#{sex}" +
             ",#{idNumber},#{createTime},#{updateTime},#{createUser},#{updateUser},#{status})")
     void addEmp(Employee employee);
+
+    Page<Employee> selectEmpByPage(EmployeePageQueryDTO employeePageQueryDTO);
 }
