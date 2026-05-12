@@ -1,6 +1,7 @@
 package com.jin.server.interceptor;
 
 import com.jin.common.constant.JwtClaimsConstant;
+import com.jin.common.context.BaseContext;
 import com.jin.common.properties.JwtProperties;
 import com.jin.common.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -46,7 +47,8 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
-            log.info("当前员工id：", empId);
+            log.info("当前员工id：{}", empId);
+            BaseContext.setCurrentId(empId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {
@@ -54,5 +56,21 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             response.setStatus(401);
             return false;
         }
+    }
+
+    /**
+     * 清除ThreadLocal数据防止内存泄漏
+     * @param request current HTTP request
+     * @param response current HTTP response
+     * @param handler the handler (or {@link HandlerMethod}) that started asynchronous
+     * execution, for type and/or instance examination
+     * @param ex any exception thrown on handler execution, if any; this does not
+     * include exceptions that have been handled through an exception resolver
+     * @throws Exception
+     */
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        // 清除当前线程的 ThreadLocal 数据
+        BaseContext.removeCurrentId();
     }
 }

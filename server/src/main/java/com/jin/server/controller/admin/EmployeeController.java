@@ -1,6 +1,7 @@
 package com.jin.server.controller.admin;
 
 import com.jin.common.constant.JwtClaimsConstant;
+import com.jin.pojo.dto.EmployeeDTO;
 import com.jin.pojo.dto.EmployeeLoginDTO;
 import com.jin.pojo.entity.Employee;
 import com.jin.common.properties.JwtProperties;
@@ -68,6 +69,17 @@ public class EmployeeController {
      */
     @PostMapping("/logout")
     public Result<String> logout() {
+        return Result.success();
+    }
+
+    /**
+     * 新增员工
+     * @return
+     */
+    @PostMapping()
+    public Result addEmp(@RequestBody EmployeeDTO employeeDTO){
+        log.info("新增员工:{}",employeeDTO);
+        employeeService.addEmp(employeeDTO);
         return Result.success();
     }
 

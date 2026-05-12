@@ -1,7 +1,10 @@
 package com.jin.server.service.impl;
 
 import com.jin.common.constant.MessageConstant;
+import com.jin.common.constant.PasswordConstant;
 import com.jin.common.constant.StatusConstant;
+import com.jin.common.context.BaseContext;
+import com.jin.pojo.dto.EmployeeDTO;
 import com.jin.pojo.dto.EmployeeLoginDTO;
 import com.jin.pojo.entity.Employee;
 import com.jin.common.exception.AccountLockedException;
@@ -9,9 +12,12 @@ import com.jin.common.exception.AccountNotFoundException;
 import com.jin.common.exception.PasswordErrorException;
 import com.jin.server.mapper.EmployeeMapper;
 import com.jin.server.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -53,6 +59,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    @Override
+    public void addEmp(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        employee.setStatus(StatusConstant.ENABLE);
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setCreateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.addEmp(employee);
     }
 
 }
