@@ -86,13 +86,39 @@ public class EmployeeController {
     /**
      * 分页查询员工
      * @param employeePageQueryDTO
-     * @return
      */
     @GetMapping("/page")
     public Result<PageResult> selectEmpByPage(EmployeePageQueryDTO employeePageQueryDTO){
         log.info("分页查询参数位:{}",employeePageQueryDTO);
         PageResult pageResult = employeeService.selectEmpByPage(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 启用或禁用员工
+     * @param id
+     * @param status
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public Result updateStatus(Long id, @PathVariable Integer status){
+        log.info("更新员工:{}状态为{}",id,status);
+        employeeService.updateStatus(id,status);
+        return Result.success();
+    }
+
+    @GetMapping("{id}")
+    public Result<Employee> getEmpById(@PathVariable Long id){
+        log.info("查询员工id:{}",id);
+        Employee emp = employeeService.getEmpById(id);
+        return Result.success(emp);
+    }
+
+    @PutMapping()
+    public Result updateEmp(@RequestBody EmployeeDTO employeeDTO){
+        log.info("更新员工数据:{}",employeeDTO);
+        employeeService.updateEmp(employeeDTO);
+        return Result.success();
     }
 
 }

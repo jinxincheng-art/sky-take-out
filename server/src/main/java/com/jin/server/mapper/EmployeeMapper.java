@@ -1,14 +1,12 @@
 package com.jin.server.mapper;
 
 import com.github.pagehelper.Page;
-import com.jin.common.result.PageResult;
 import com.jin.pojo.dto.EmployeePageQueryDTO;
 import com.jin.pojo.entity.Employee;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface EmployeeMapper {
@@ -27,4 +25,12 @@ public interface EmployeeMapper {
     void addEmp(Employee employee);
 
     Page<Employee> selectEmpByPage(EmployeePageQueryDTO employeePageQueryDTO);
+
+    @Update("update employee set status = #{status} where id = #{id}")
+    void updateStatus(Long id, Integer status);
+
+    @Select("select * from employee where id = #{id}")
+    Employee getEmpById(Long id);
+
+    void updateEmp(Employee emp);
 }

@@ -29,4 +29,15 @@ public interface EmployeeService {
      * @return
      */
     PageResult selectEmpByPage(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * 启用或禁用员工
+     * @param id
+     * @param status
+     */
+    void updateStatus(Long id, Integer status);
+
+    Employee getEmpById(Long id);
+
+    void updateEmp(EmployeeDTO employeeDTO);
 }
